@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  geography-db:
+    container_name: geography-db
+    hostname: geography-db
+    build:
+      context: 01_DB/
+      dockerfile: Dockerfile
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=geographydb
+  geography-server:
+    container_name: geography-server
+    build:
+      context: 02_Server/.
+      dockerfile: Dockerfile.compose
+    depends_on:
+      - geography-db
+    ports:
+      - '4000:4000'
+    command: sh wait-mongo.sh
+    environment:
+      - MONGODB_URL=mongodb://admin:admin@geography-db:27017/geographydb?authSource=admin

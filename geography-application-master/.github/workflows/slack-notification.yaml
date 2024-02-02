@@ -1,0 +1,22 @@
+name: Slack Demo
+on:
+  workflow_dispatch:
+  workflow_call:
+  # push:
+    # branches: [ "master" ]
+  # pull_request:
+    # branches: [ "master" ]
+
+jobs:
+  slack_notification:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_TITLE: "Sent From GitHub Action"
+        SLACK_MESSAGE: "Prog Kyiv UA Slack Demo"
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_FOOTER: "Footer message"

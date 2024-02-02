@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  geography-db:
+    image: yemax/geography-db:1
+    container_name: geography-db
+    hostname: geography-db
+    ports:
+      - '27017:27017'
+    env_file: .env.db
+    networks:
+      - geography-network
+  geography-server:
+    image: yemax/geography-server:1
+    hostname: geography-server
+    container_name: server
+    depends_on:
+      - geography-db
+    ports:
+      - '4000:4000'
+    env_file: .env.srv
+    networks:
+      - geography-network
+  geography-frontend:
+    image: yemax/geography-frontend:1
+    container_name: frontend
+    hostname: geography-frontend
+    depends_on:
+      - geography-server
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.ui
+    networks:
+      - geography-network
+
+networks:
+    geography-network:
+        driver: bridge

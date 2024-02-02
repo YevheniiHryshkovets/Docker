@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  geography-db:
+    container_name: geography-db
+    hostname: geography-db
+    build: 01_DB/.
+    ports:
+      - '27017:27017'
+    env_file: .env.db
+  geography-server:
+    container_name: server
+    build:
+      context: 02_Server/.
+      dockerfile: Dockerfile.compose
+    depends_on:
+      - geography-db
+    ports:
+      - '4000:4000'
+#    command: sh wait-mongo.sh
+    env_file: .env.srv
+  geography-frontend:
+    container_name: frontend
+    hostname: geography-frontend
+    build:
+      context: 03_Client/
+      dockerfile: Dockerfile.compose
+    depends_on:
+      - geography-server
+    ports:
+      - '3000:3000'
+    env_file: .env.ui
