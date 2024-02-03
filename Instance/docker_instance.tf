@@ -23,7 +23,7 @@ resource "aws_instance" "docker-server" {
   vpc_security_group_ids = [aws_security_group.docker-server.id]
   key_name               = "0712mac"
   # user_data              = data.template_file.init.rendered
-  # user_data = file("./docker_setup.sh")
+  user_data = file("./docker_setup.sh")
   tags = {
     Name  = "docker"
     Owner = "Admin"
